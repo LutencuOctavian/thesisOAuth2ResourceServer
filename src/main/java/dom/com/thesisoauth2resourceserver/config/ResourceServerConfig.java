@@ -16,8 +16,8 @@ public class ResourceServerConfig {
     @Bean
     public SecurityFilterChain securityFilterChainAs(HttpSecurity http) throws Exception {
         return http
+                .csrf(csrf-> csrf.ignoringRequestMatchers("category/new-category"))
                 .authorizeHttpRequests(auth-> auth
-                        .requestMatchers("/api/home/test").hasAnyAuthority("ROLE_USER")
                         .anyRequest().authenticated())
                 .oauth2ResourceServer(oauth2 -> oauth2.jwt(jwt ->jwt.jwtAuthenticationConverter(customJwtAuthenticationConverter())))
                 .build();
