@@ -22,14 +22,6 @@ public class CategoryController {
         this.categoryService = categoryService;
     }
 
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @RequestMapping(path = "/test", method = RequestMethod.GET)
-    public ResponseEntity<Object> test(AbstractOAuth2TokenAuthenticationToken<?> auth) throws ParseException {
-
-        System.out.println(auth.getTokenAttributes().get("userId"));
-        return ResponseEntity.ok("SUPPER");
-    }
-
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
     @RequestMapping(path = "/new-category", method = RequestMethod.POST)
     public ResponseEntity<Object> addNewCategory(@RequestParam("category") String category, AbstractOAuth2TokenAuthenticationToken<?> auth) throws ParseException {

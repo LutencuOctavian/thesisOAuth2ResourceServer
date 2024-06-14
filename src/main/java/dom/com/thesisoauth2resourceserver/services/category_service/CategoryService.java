@@ -37,6 +37,11 @@ public class CategoryService implements ICategoryService{
         return categoryRepository.findAllCategoriesForUser(userId).orElseThrow(()-> new CategoryException("Category table doesn't exist"));
     }
 
+    public CategoryEntity findCategoryById(Long categoryId) {
+        return categoryRepository.findCategoryById(categoryId)
+                .orElseThrow(() -> new CategoryException("No such category id: " + categoryId + " in database"));
+    }
+
     private void checkIfThisCategoryExistAlready(Long userId, String category) {
         List<String> categoryList = categoryRepository.findCategoryByName(userId, category)
                 .orElseThrow(() -> new CategoryException("Category table is empty in dataBase"));
@@ -44,10 +49,5 @@ public class CategoryService implements ICategoryService{
         if(categoryList.contains(category)){
             throw new CategoryException("This category (" + category + ") exist already in dataBase");
         }
-    }
-
-    private CategoryEntity findCategoryById(Long categoryId) {
-        return categoryRepository.findCategoryById(categoryId)
-                .orElseThrow(() -> new CategoryException("No such category id: " + categoryId + " in database"));
     }
 }
