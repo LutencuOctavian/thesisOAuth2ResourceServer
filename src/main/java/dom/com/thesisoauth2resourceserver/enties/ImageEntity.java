@@ -1,11 +1,15 @@
 package dom.com.thesisoauth2resourceserver.enties;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import java.time.LocalDate;
 import java.util.List;
 
 @Entity
 @Table(name="images")
+@AllArgsConstructor
+@Builder
 public class ImageEntity {
 
     @Id
@@ -27,17 +31,18 @@ public class ImageEntity {
 
     @Enumerated(EnumType.STRING)
     @Column(name="latitude_hemisphere")
-    private HisphereEnum latitudeHemisphere;
+    private HemisphereEnum latitudeHemisphere;
 
     @Enumerated(EnumType.STRING)
     @Column(name="longitude_hemisphere")
-    private HisphereEnum longitudeHemisphere;
+    private HemisphereEnum longitudeHemisphere;
 
     @Column(name="annotation")
     private String annotation;
 
-    @Column(name="image_base64")
-    private String imageBase64;
+    @Lob
+    @Column(name="image_array_bytes", columnDefinition = "longblob")
+    private byte[] imageArrayOfBytes;
 
     @OneToMany(mappedBy = "imageEntity", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<ImageSubCategoryEntity> imageSubCategoryEntityList;
@@ -45,8 +50,8 @@ public class ImageEntity {
     public ImageEntity() {}
 
     public ImageEntity(String location, LocalDate date, Double latitudeDegrees,
-                       Double longitudeDegrees, HisphereEnum latitudeHemisphere,
-                       HisphereEnum longitudeHemisphere, String annotation, String imageBase64) {
+                       Double longitudeDegrees, HemisphereEnum latitudeHemisphere,
+                       HemisphereEnum longitudeHemisphere, String annotation, byte[] imageBase64) {
         this.location = location;
         this.date = date;
         this.latitudeDegrees = latitudeDegrees;
@@ -54,22 +59,22 @@ public class ImageEntity {
         this.latitudeHemisphere = latitudeHemisphere;
         this.longitudeHemisphere = longitudeHemisphere;
         this.annotation = annotation;
-        this.imageBase64 = imageBase64;
+        this.imageArrayOfBytes = imageBase64;
     }
 
-    public enum HisphereEnum {
+    public enum HemisphereEnum {
         NORTH("NORTH"),
         EAST("EAST"),
         WEST("WEST"),
         SOUTH("SOUTH");
         private final String label;
 
-        HisphereEnum(String grantType) {
+        HemisphereEnum(String grantType) {
             this.label = grantType;
         }
 
-        public static HisphereEnum valueOfLabel(String label) {
-            for (HisphereEnum hemisphere : values()) {
+        public static HemisphereEnum valueOfLabel(String label) {
+            for (HemisphereEnum hemisphere : values()) {
                 if (hemisphere.label.equals(label)) {
                     return hemisphere;
                 }
@@ -77,7 +82,7 @@ public class ImageEntity {
             return null;
         }
 
-        public static List<HisphereEnum> getAllValuesOfEnum() {
+        public static List<HemisphereEnum> getAllValuesOfEnum() {
             return List.of(values());
         }
 
@@ -127,19 +132,19 @@ public class ImageEntity {
         this.longitudeDegrees = longitudeDegrees;
     }
 
-    public HisphereEnum getLatitudeHemisphere() {
+    public HemisphereEnum getLatitudeHemisphere() {
         return latitudeHemisphere;
     }
 
-    public void setLatitudeHemisphere(HisphereEnum latitudeHemisphere) {
+    public void setLatitudeHemisphere(HemisphereEnum latitudeHemisphere) {
         this.latitudeHemisphere = latitudeHemisphere;
     }
 
-    public HisphereEnum getLongitudeHemisphere() {
+    public HemisphereEnum getLongitudeHemisphere() {
         return longitudeHemisphere;
     }
 
-    public void setLongitudeHemisphere(HisphereEnum longitudeHemisphere) {
+    public void setLongitudeHemisphere(HemisphereEnum longitudeHemisphere) {
         this.longitudeHemisphere = longitudeHemisphere;
     }
 
@@ -151,12 +156,12 @@ public class ImageEntity {
         this.annotation = annotation;
     }
 
-    public String getImageBase64() {
-        return imageBase64;
+    public byte[] getImageArrayOfBytes() {
+        return imageArrayOfBytes;
     }
 
-    public void setImageBase64(String imageBase64) {
-        this.imageBase64 = imageBase64;
+    public void setImageArrayOfBytes(byte[] image) {
+        this.imageArrayOfBytes = image;
     }
 
     public List<ImageSubCategoryEntity> getImageSubCategoryEntityList() {

@@ -1,4 +1,4 @@
-package dom.com.thesisoauth2resourceserver.config.conterters;
+package dom.com.thesisoauth2resourceserver.config.converters;
 
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.security.core.GrantedAuthority;
