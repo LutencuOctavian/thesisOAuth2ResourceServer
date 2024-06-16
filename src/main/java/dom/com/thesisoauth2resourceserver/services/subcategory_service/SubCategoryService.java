@@ -55,7 +55,7 @@ public class SubCategoryService implements ISubCategoryService{
                 .orElseThrow(()-> new SubCategoryException("Subcategory table is empty in dataBase"));
 
         if(!subCategoryList.isEmpty()){
-            throw new CategoryException("This subcategory (" + subCategory + ") exist already in dataBase");
+            throw new SubCategoryException("This subcategory (" + subCategory + ") exist already in dataBase");
         }
     }
 }

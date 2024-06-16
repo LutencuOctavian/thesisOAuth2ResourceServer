@@ -7,6 +7,7 @@ import org.apache.commons.imaging.ImageReadException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import java.io.IOException;
 
@@ -21,6 +22,7 @@ public class GPSController {
         this.gpsService = gpsService;
     }
 
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
     @RequestMapping(path="/get-data-image", method = RequestMethod.POST)
     public ResponseEntity<Object> getGPSDataFromImage(@RequestBody ImageDTO imageDTO) throws IOException, ImageReadException {
         GPSDTO gpsDataForImage = gpsService.getGPSDataForImage(imageDTO.getImageBase64());
